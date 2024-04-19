@@ -1,0 +1,5 @@
+@each $font-weight in $font-weights {
+  @font-face {
+    @include font-face-mixin("Roboto", 400);
+  }
+}

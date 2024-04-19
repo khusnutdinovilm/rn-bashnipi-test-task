@@ -1,0 +1,16 @@
+$font-path: "@/assets/fonts/";
+
+@function get-font-url($font-file-name, $ext) {
+  @return "#{$font-path}/#{$font-file-name}.#{$ext}";
+}
+
+@mixin font-face-mixin($font-name, $font-weight, $font-style: normal) {
+  $font-file-name: "#{$font-name}-#{$font-weight}";
+  font-family: $font-name;
+  font-weight: $font-weight;
+  font-display: fallback;
+  src: url(get-font-url($font-file-name, "woff2")) format("woff2"),
+    url(get-font-url($font-file-name, "woff")) format("woff"),
+    url(get-font-url($font-file-name, "ttf")) format("ttf");
+  font-style: $font-style;
+}
