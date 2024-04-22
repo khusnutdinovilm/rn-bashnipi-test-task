@@ -107,6 +107,7 @@
                 id="user-website"
                 label-text="Website"
                 v-model="userItem.website"
+                style="margin-bottom: 26px"
               />
             </td>
           </tr>
@@ -114,7 +115,7 @@
       </table>
 
       <div class="user-item-form__btn">
-        <ui-button @click.prevent="updateUser" :disabled="isUserFieldsChanged">
+        <ui-button @click.prevent="updateUser" :disabled="!isUserFieldsChanged">
           <tick-icon />
         </ui-button>
       </div>
@@ -123,25 +124,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { User } from "@/types/users";
+import { UserProps } from "@/types/props";
 
-const props = defineProps<{
-  user: User;
-}>();
-const emits = defineEmits<{
-  (e: "update:user", user: User): void;
-}>();
+const props = defineProps<UserProps>();
+const emits = defineEmits<{ (e: "updateUser", user: User): void }>();
 
 const userItem = ref<User>(JSON.parse(JSON.stringify(props.user)));
 
-const isUserFieldsChanged = computed(() => {
-  return JSON.stringify(userItem.value) === JSON.stringify(props.user);
-});
+const isUserFieldsChanged = computed(
+  () => JSON.stringify(userItem.value) !== JSON.stringify(props.user),
+);
 
-const updateUser = () => {
-  emits("update:user", userItem.value);
-};
+const updateUser = () => emits("updateUser", userItem.value);
 </script>
 
 <style lang="scss">
@@ -180,6 +176,7 @@ const updateUser = () => {
 
   & td {
     padding: 11px 31px 10px 31px;
+    border-left: 1px solid #d9dbda;
   }
 }
 .user-item-form {

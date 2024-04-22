@@ -31,27 +31,11 @@
               @toggle-accordion="setOpennedUserId(user.id)"
             >
               <template #accordion-item-header>
-                <div class="user-item__heading">
-                  <div class="user-item__heading-text">
-                    <select-arrow-icon />
-                  </div>
-                  <div class="user-item__heading-text">
-                    {{ user.name }}
-                  </div>
-                  <div class="user-item__heading-text">
-                    {{ user.email }}
-                  </div>
-                  <div class="user-item__heading-text">
-                    {{ user.phone }}
-                  </div>
-                  <div class="user-item__heading-text">
-                    {{ user.website }}
-                  </div>
-                </div>
+                <user-item-heading :user="user"/>
               </template>
 
-              <template #accordion-item-full :key="updateCount">
-                <!-- <user-item-form v-model:user="user" /> -->
+              <template #accordion-item-full>
+                <user-item-form :user="user" @update-user="updateUser" />
               </template>
             </accordion-item>
           </accordion-list>
@@ -62,14 +46,13 @@
 </template>
 
 <script setup lang="ts">
+import { UserItemForm, UserItemHeading } from "@/components/user-item";
+
 import { AccordionList, AccordionItem } from "@/components/accordion";
 
-import { UserItemForm } from "@/components/user-item";
-
-import { onMounted, ref } from "vue";
+import { onMounted, computed, ref } from "vue";
 
 import { usersStore } from "@/store";
-import { computed } from "@vue/reactivity";
 import { User } from "@/types/users";
 
 const store = usersStore();
@@ -79,22 +62,16 @@ const userListLoading = ref<boolean>(true);
 const usersList = computed(() => store.users);
 
 const opennedUserId = ref<number | null>(null);
-const setOpennedUserId = (userId: number) => {
-  if (opennedUserId.value !== userId) {
-    opennedUserId.value = userId;
-  } else {
-    opennedUserId.value = null;
-  }
-};
+const setOpennedUserId = (userId: number) =>
+  (opennedUserId.value = opennedUserId.value !== userId ? userId : null);
 
-const updateCount = ref<number>(0);
 const updateUser = async (user: User) => {
   try {
     await store.updateUser(user);
-    updateCount.value++;
-    alert("1" + JSON.stringify(user));
   } catch (error) {
     throw error;
+  } finally {
+    opennedUserId.value = null;
   }
 };
 
@@ -110,14 +87,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss">
-.grid {
-  &__wrapper {
-    display: grid;
-    grid-template-columns: 50px repeat(4, 1fr);
-    align-items: center;
-  }
-}
-
 .users-list {
   &__grid {
     font-family: $main-font-family;
@@ -144,24 +113,6 @@ onMounted(async () => {
     font-weight: 400;
     line-height: 16.41px;
     color: #696969;
-  }
-}
-
-.user-item {
-  &__heading {
-    display: grid;
-    grid-template-columns: 50px repeat(4, 1fr);
-    border: 1px solid #ffd200;
-    border-radius: 4px;
-    padding: 14px 0 15px 11px;
-
-    &-text {
-      font-family: $main-font-family;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 16.41px;
-      color: #696969;
-    }
   }
 }
 </style>

@@ -8,7 +8,7 @@
         <slot name="accordion-item-header" />
       </header>
 
-      <div v-show="isItemOpen" class="accordion-item__full">
+      <div v-if="isItemOpen" class="accordion-item__full">
         <slot name="accordion-item-full" />
       </div>
     </div>
@@ -16,12 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { AccordionItemProps } from "@/types/props";
+import { computed } from "vue";
 
-const props = defineProps<{
-  activeId: number | null;
-  currentId: number;
-}>();
+const props = defineProps<AccordionItemProps>();
 const emits = defineEmits<{
   (e: "toggle-accordion", currentId: number): void;
 }>();

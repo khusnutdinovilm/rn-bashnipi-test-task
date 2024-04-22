@@ -14,7 +14,7 @@ export default defineStore("users", () => {
       const response = await api.getUsers();
       users.value = await response.json();
     } catch (error: any) {
-      // alert(error.message);
+      alert(error.message);
     }
   };
 
@@ -28,11 +28,10 @@ export default defineStore("users", () => {
 
       if (idx === -1) return;
 
-      await api.updateUser(updatedUser);
-
       users.value[idx] = updatedUser;
+      alert("1" + JSON.stringify(updatedUser));
     } catch (error: any) {
-      // alert(error.message);
+      alert(error.message);
     }
   };
 

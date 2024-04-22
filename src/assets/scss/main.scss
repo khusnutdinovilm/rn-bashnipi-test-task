@@ -2,3 +2,11 @@
 @import "./variables.scss";
 @import "./mixins.scss";
 @import "./fonts.scss";
+
+.grid {
+  &__wrapper {
+    display: grid;
+    grid-template-columns: 50px repeat(4, 1fr);
+    align-items: center;
+  }
+}
