@@ -51,7 +51,7 @@
               </template>
 
               <template #accordion-item-full :key="updateCount">
-                <user-item-form v-model:user="user" />
+                <!-- <user-item-form v-model:user="user" /> -->
               </template>
             </accordion-item>
           </accordion-list>
